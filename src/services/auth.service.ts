@@ -1,5 +1,5 @@
 
-import { User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 
@@ -22,11 +22,23 @@ export interface OnboardingData {
   preferredWorkouts: string[];
 }
 
+// Define a User type that matches the Prisma schema without importing directly
+type User = {
+  id: string;
+  email: string;
+  password?: string;
+  googleId?: string | null;
+  name?: string | null;
+  profilePicture?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 class AuthService {
   /**
    * Register a new user with email and password
    */
-  async signup({ email, password, name }: SignupData): Promise<User> {
+  async signup({ email, password, name }: SignupData): Promise<Omit<User, 'password'>> {
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email }
@@ -50,13 +62,13 @@ class AuthService {
 
     // Remove password from returned user object
     const { password: _, ...userWithoutPassword } = user;
-    return userWithoutPassword as User;
+    return userWithoutPassword;
   }
 
   /**
    * Authenticate a user by email and password
    */
-  async login({ email, password }: AuthCredentials): Promise<User> {
+  async login({ email, password }: AuthCredentials): Promise<Omit<User, 'password'>> {
     // Find the user
     const user = await prisma.user.findUnique({
       where: { email }
@@ -74,7 +86,7 @@ class AuthService {
 
     // Remove password from returned user object
     const { password: _, ...userWithoutPassword } = user;
-    return userWithoutPassword as User;
+    return userWithoutPassword;
   }
 
   /**

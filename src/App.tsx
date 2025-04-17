@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +10,8 @@ import StartWorkout from "./pages/StartWorkout";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
+import Progress from "./pages/Progress";
 
 const queryClient = new QueryClient();
 
@@ -27,11 +28,9 @@ const App = () => (
             <Route path="/start-workout" element={<StartWorkout />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={<Onboarding />} />
-            {/* These routes will be implemented later */}
-            <Route path="/progress" element={<NotFound />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/community" element={<NotFound />} />
-            <Route path="/profile" element={<NotFound />} />
-            {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

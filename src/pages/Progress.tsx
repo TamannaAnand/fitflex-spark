@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import Layout from '@/components/layout/Layout';
@@ -17,8 +16,12 @@ import { format } from 'date-fns';
 
 const Progress = () => {
   const { user } = useAuth();
-  const [stats, setStats] = useState<any>(null);
-  const [progressData, setProgressData] = useState<any[]>([]);
+  const [stats, setStats] = useState<{
+    completedWorkouts: number;
+    // workoutHistory: ;
+    totalWeightLifted: number;
+  } | null>(null);
+  const [progressData, setProgressData] = useState<number[]>([]);
 
   useEffect(() => {
     const loadStats = async () => {
@@ -27,7 +30,6 @@ const Progress = () => {
         setStats(data);
 
         const progress = await workoutService.getWorkoutProgressData(user.id);
-        // Process workout data for the chart
         const chartData = progress.map(session => ({
           date: format(new Date(session.startTime), 'MMM dd'),
           volume: session.sets.reduce((total, set) => total + (set.weight || 0) * set.reps, 0)
@@ -114,14 +116,14 @@ const Progress = () => {
           </Card>
 
           {/* Recent Workouts */}
-          {stats?.workoutHistory && stats.workoutHistory.length > 0 && (
+          {/* {stats?.workoutHistory && stats.workoutHistory.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle>Recent Workouts</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {stats.workoutHistory.map((session: any) => (
+                  {stats.workoutHistory.map((session) => (
                     <div
                       key={session.id}
                       className="flex items-center justify-between border-b pb-4"
@@ -145,7 +147,7 @@ const Progress = () => {
                 </div>
               </CardContent>
             </Card>
-          )}
+          )} */}
         </div>
       </div>
     </Layout>

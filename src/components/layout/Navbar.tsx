@@ -20,7 +20,7 @@ const navLinks = [
   { title: 'Home', path: '/' },
   { title: 'Workouts', path: '/workouts' },
   { title: 'Progress', path: '/progress' },
-  { title: 'Community', path: '/community' },
+  { title: 'Profile', path: '/profile' },
 ];
 
 const Navbar: React.FC = () => {

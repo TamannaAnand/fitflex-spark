@@ -1,13 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import React from 'react';
+import Layout from '@/components/layout/Layout';
+import HeroSection from '@/components/home/HeroSection';
+import FeaturesSection from '@/components/home/FeaturesSection';
+import WorkoutLibrarySection from '@/components/home/WorkoutLibrarySection';
+import MotivationalQuote from '@/components/common/MotivationalQuote';
+
+const Index: React.FC = () => {
+  // This would typically come from a Supabase fetch, but we're mocking for now
+  const motivationalQuote = {
+    quote: "The only bad workout is the one that didn't happen. Every step forward is progress, no matter how small.",
+    author: "Fitness Motivator"
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <Layout>
+      <HeroSection />
+      <div className="container mx-auto px-4 py-8">
+        <MotivationalQuote quote={motivationalQuote.quote} author={motivationalQuote.author} />
       </div>
-    </div>
+      <FeaturesSection />
+      <WorkoutLibrarySection />
+    </Layout>
   );
 };
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { Clock, Flame, Dumbbell, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 export interface WorkoutCardProps {
   id: string;
@@ -23,6 +24,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
   category,
   imageUrl,
 }) => {
+  const navigate = useNavigate();
   
   // Determine difficulty color
   const difficultyColor = {
@@ -39,6 +41,14 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
     Yoga: () => <Flame className="h-4 w-4" />,
     Flexibility: () => <Flame className="h-4 w-4" />,
   }[category];
+
+  const handleStartWorkout = () => {
+    navigate('/start-workout', { 
+      state: { 
+        workout: { id, title, description, duration, difficulty, category, imageUrl } 
+      } 
+    });
+  };
 
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
@@ -76,7 +86,12 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
         <Button variant="ghost" size="sm" className="text-fitflex-purple hover:text-fitflex-purple-dark hover:bg-fitflex-purple/10">
           Save
         </Button>
-        <Button variant="ghost" size="sm" className="text-fitflex-purple hover:text-fitflex-purple-dark hover:bg-fitflex-purple/10 group">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-fitflex-purple hover:text-fitflex-purple-dark hover:bg-fitflex-purple/10 group"
+          onClick={handleStartWorkout}
+        >
           Start
           <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>

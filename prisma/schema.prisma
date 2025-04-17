@@ -1,0 +1,83 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Exercise {
+  id           String        @id @default(uuid())
+  name         String
+  description  String
+  muscleGroup  String
+  difficulty   String
+  instructions String[]
+  imageUrl     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  workouts     WorkoutExercise[]
+}
+
+model Workout {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  duration    Int           // in minutes
+  difficulty  String
+  category    String
+  imageUrl    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  exercises   WorkoutExercise[]
+  sessions    WorkoutSession[]
+}
+
+model WorkoutExercise {
+  id          String   @id @default(uuid())
+  workout     Workout  @relation(fields: [workoutId], references: [id])
+  workoutId   String
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
+  exerciseId  String
+  sets        Int
+  reps        Int
+  restTime    Int      // in seconds
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([workoutId, exerciseId, order])
+}
+
+model WorkoutSession {
+  id        String   @id @default(uuid())
+  workout   Workout  @relation(fields: [workoutId], references: [id])
+  workoutId String
+  startTime DateTime @default(now())
+  endTime   DateTime?
+  completed Boolean  @default(false)
+  sets      WorkoutSessionSet[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkoutSessionSet {
+  id              String         @id @default(uuid())
+  workoutSession  WorkoutSession @relation(fields: [sessionId], references: [id])
+  sessionId       String
+  exerciseId      String
+  exerciseName    String         // Denormalized for performance
+  setNumber       Int
+  reps            Int
+  weight          Float?
+  completed       Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@unique([sessionId, exerciseId, setNumber])
+}
